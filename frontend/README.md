@@ -1,70 +1,113 @@
-# Getting Started with Create React App
+# Collaborative Real-Time Form Editor
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+##  Folder Structure
 
-## Available Scripts
+```
+collab-form-editor/
+├── backend/               # Node.js + Express + WebSocket server
+│   └── server.js
+├── frontend/              # React frontend
+│   ├── public/
+│   └── src/
+│       ├── App.js
+│       └── index.js
+├── README.md
+├── package.json (for backend if needed)
+```
 
-In the project directory, you can run:
+---
 
-### `npm start`
+##  Setup & Run Instructions
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Prerequisites
+- Node.js & npm installed
+- Git installed
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### 1. Clone the repository
+```bash
+git clone https://github.com/akshatagoyal/collab-form-editor.git
+cd collab-form-editor
+```
 
-### `npm test`
+### 2. Setup Backend
+```bash
+cd backend
+npm install
+node server.js
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 3. Setup Frontend
+```bash
+cd ../frontend
+npm install
+npm start
+```
 
-### `npm run build`
+App runs on `http://localhost:3000` and connects to WebSocket server at `ws://localhost:3001`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+---
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+##  Architecture & Design
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- **Frontend**: React for dynamic UI updates, local state management.
+- **Backend**: Node.js + Express with `ws` (WebSocket) library for real-time communication.
+- **Communication**: WebSocket is used for two-way communication to sync form state across clients.
+- **Data Handling**: In-memory JS object stores form responses. Each form has shared state.
 
-### `npm run eject`
+---
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+##  Technologies Used
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+| Tech        | Reason                                     |
+|-------------|--------------------------------------------|
+| React       | Component-based UI & stateful rendering    |
+| WebSocket   | Real-time two-way communication            |
+| Express.js  | Lightweight Node backend                   |
+| Node.js     | Server runtime                             |
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+---
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+##  Key Features & Edge Cases
 
-## Learn More
+- ✅ Admin creates forms with title, description, category fields
+- ✅ Users can join via shared URL
+- ✅ All users edit the same form collaboratively
+- ✅ Live updates via WebSocket syncs changes instantly
+- ✅ Basic field locking to avoid overwriting in conflict
+- ✅ Admin vs User role (editable fields shown/disabled)
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Edge Cases Handled:
+-  Simultaneous edit attempts (field-level locking)
+-  User disconnect/reconnect
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+---
 
-### Code Splitting
+##  API Docs (Postman)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### `GET /`
+> Used for test endpoint.
 
-### Analyzing the Bundle Size
+### `WebSocket Messages`
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+| Event         | Payload                            | Description                        |
+|---------------|-------------------------------------|------------------------------------|
+| `join_form`   | `{ formId: "123" }`                | User joins a form                  |
+| `update_data` | `{ field: "title", value: "abc" }` | Field update broadcast             |
+| `lock_field`  | `{ field: "title" }`               | Lock a field during editing        |
+| `unlock_field`| `{ field: "title" }`               | Unlock on blur/stop typing         |
 
-### Making a Progressive Web App
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+##  Submission Summary
+- ✅ GitHub: [collab-form-editor](https://github.com/akshatagoyal/collab-form-editor)
+- ✅ Folder structure maintained
+- ✅ Real-time sync with WebSocket
+- ✅ Admin/user distinction
+- ✅ README included
+- 🔄 Postman JSON collection ready
+- 🟢 Deployment pending (optional)
+- 🟢 Video walkthrough pending (optional)
 
-### Advanced Configuration
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
 
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
